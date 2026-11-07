@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Agency</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Explore Destinations</h1>
+        {% if session.get('name') %}
+            <p>Welcome, {{ session['name'] }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </header>
+    <section class="destinations">
+        {% for destination in destinations %}
+            <div class="destination">
+                <h2>{{ destination['name'] }}</h2>
+                <p>{{ destination['description'] }}</p>
+                <p>Price: ${{ destination['price'] }}</p>
+                <img src="{{ destination['image_url'] }}" alt="{{ destination['name'] }}">
+                {% if session.get('user_id') %}
+                    <form action="{{ url_for('book', dest_id=destination['dest_id']) }}" method="post">
+                        <button type="submit">Book Now</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </section>
+</body>
+</html>
